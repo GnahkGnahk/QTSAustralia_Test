@@ -1,0 +1,3 @@
+Chức năng chưa hoàng thiện:
+- Màn chơi có thể Restart mà không cần khởi động lại Editor
+   + Bug: Khi load lại có 1 Gameobject Manager bị null (đang fix)
