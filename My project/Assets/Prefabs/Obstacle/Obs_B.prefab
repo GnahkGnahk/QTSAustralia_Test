@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 1749067624271873456}
+  damage: 2
 --- !u!195 &1749067624271873456
 NavMeshAgent:
   m_ObjectHideFlags: 0

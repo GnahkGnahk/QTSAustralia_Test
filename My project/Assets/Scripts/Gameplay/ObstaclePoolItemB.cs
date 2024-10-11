@@ -5,9 +5,12 @@ using UnityEngine.AI;
 
 public class ObstaclePoolItemB : PoolItem, IObsticelFeature {
     [SerializeField] NavMeshAgent agent;
+    [SerializeField] int damage;
 
-    bool isChasingPlayer = true;
+    bool isChasingPlayer = true, firstSetup = true;
     MeshRenderer meshRenderer = null;
+
+    public static event Action<int> OnLostHP;
 
     internal override Type GetItemType()
     {
@@ -16,17 +19,23 @@ public class ObstaclePoolItemB : PoolItem, IObsticelFeature {
 
     public void Setup()
     {
-        if (!meshRenderer)
+        if (firstSetup)
         {
             meshRenderer = gameObject.GetComponent<MeshRenderer>();
+
+            OnLostHP += GameManager.Instance.LostHP;
+
+            firstSetup = false;
         }
+
         isChasingPlayer = true;
         Utility.ChangeColorMateMesh(Color.grey, meshRenderer);
+
     }
 
     public void UpdateDestination(Vector3 position)
     {
-        if (gameObject.activeInHierarchy && isChasingPlayer)
+        if (gameObject.activeInHierarchy && isChasingPlayer && agent.isOnNavMesh)
         {
             agent.destination = position;
             float dist = Vector3.Distance(position, transform.position);
@@ -51,6 +60,8 @@ public class ObstaclePoolItemB : PoolItem, IObsticelFeature {
 
         Vector3 direction = collision.transform.position - transform.position;
         gameObject.GetComponent<Rigidbody>().AddForce(direction * 5, ForceMode.Impulse);
+
+        OnLostHP?.Invoke(damage);
 
         yield return new WaitForSeconds(3);
         PoolSystem.ReturnItem(this);

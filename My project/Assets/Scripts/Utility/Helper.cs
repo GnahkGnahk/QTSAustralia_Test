@@ -32,3 +32,14 @@ public enum ObstacleType {
     A_TYPE,
     B_TYPE,
 }
+
+public enum SpawnType {
+    OBSTACLE_POINT,
+    OBSTACLE_A,
+    OBSTACLE_B
+}
+public enum SceneGame {
+    MainMenu,
+    GamePlayScene,
+    EndGameScene,
+}
